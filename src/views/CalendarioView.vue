@@ -1,9 +1,34 @@
 <template>
+  <div>
+    <transition name="modal-slide">
+      <div v-if="showModal" class="modal" @click.self="closeModal">
+        <div class="modal-content sidebar" @click.stop>
+          <button @click="closeModal" class="close-button-sidebar">&times;</button>
+
+          <!-- Conteúdo da modal aqui -->
+          <div>
+            <!-- Botão "X" para fechar -->
+            <button @click="closeModal" class="close-modal-button">&times;</button>
+
+            <h3>{{ selectedActivity.customData.title }}</h3>
+            <p>{{ selectedActivity.customData.description }}</p>
+            <!-- Adicione mais campos conforme necessário -->
+          </div>
+        </div>
+      </div>
+    </transition>
+  </div>
+  <div>
+    <div>
+    
+  </div>
+
     <div class="text-center section">
-      <h2 class="h2">Custom Calendars</h2>
+      <h2 class="h2">Calendário</h2>
       <p class="text-lg font-medium text-gray-600 mb-6">
-        Roll your own calendars using scoped slots
+        Lista de atividades do mês.
       </p>
+
       <v-calendar
         class="custom-calendar max-w-full"
         :masks="masks"
@@ -11,37 +36,38 @@
         disable-page-swipe
         is-expanded
       >
-      <template v-slot:day-content="{ day, attributes }">
-      <div class="flex flex-col h-full z-10 overflow-hidden">
-        <span class="day-label text-sm text-gray-900">{{ day.day }}</span>
-        <div class="flex-grow overflow-y-auto overflow-x-auto">
-          <div v-for="attr in attributes" :key="attr.key">
-            <div
-              @click="() => abremodal(day, attributes, attr)"
-              class="text-xs leading-tight rounded-sm p-1 mt-1 mb-1"
-              :class="attr.customData.class"
-            >
-              {{ attr.customData.title }}
+        <template v-slot:day-content="{ day, attributes }">
+          <div class="flex flex-col h-full z-10 overflow-hidden">
+            <span class="day-label text-sm text-gray-900">{{ day.day }}</span>
+            <div class="flex-grow overflow-y-auto overflow-x-auto">
+              <div v-for="attr in attributes" :key="attr.key">
+                <div
+                  @click="() => abremodal(day, attributes, attr)"
+                  class="text-xs leading-tight rounded-sm p-1 mt-1 mb-1"
+                  :class="attr.customData.class"
+                >
+                  {{ attr.customData.title }}
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-    </template>
+        </template>
       </v-calendar>
     </div>
-  </template>
+  </div>
+</template>
   
-  <script>
-
+<script>
 export default {
-  
   data() {
-      const month = new Date().getMonth();
-      const year = new Date().getFullYear();
-      return {
-        masks: {
-          weekdays: 'WWW',
-        },
+    const month = new Date().getMonth();
+    const year = new Date().getFullYear();
+    return {
+      selectedActivity: null,
+      showModal: false,
+      masks: {
+        weekdays: 'WWW',
+      },
         attributes: [
           {
             key: 1,
@@ -124,25 +150,21 @@ export default {
             },
             dates: new Date(year, month, 25),
           },
-        ],
-      };
+          ],
+    };
+  },
+
+  methods: {
+    abremodal(day, attributes, attr) {
+      this.selectedActivity = attr;
+      this.showModal = true;
     },
-
-    methods: {
-      abremodal(day, attributes, attr) {
-      
-        console.log(attr)
-      
-      // attributes.forEach(attr => {
-      //   console.log(attr.customData)
-      // });
-
-        
-    },    
+    closeModal() {
+      this.showModal = false;
+    },
   },
 };
-
-  </script>
+</script>
   
   <style>
   ::-webkit-scrollbar {
@@ -158,16 +180,17 @@ export default {
   --day-border-highlight: 1px solid #b8c2cc;
   --day-width: 90px;
   --day-height: 90px;
-  --weekday-bg: #f8fafc;
-  --weekday-border: 1px solid #eaeaea;
-  font-size: 10px;
+  --weekday-bg: #b8f2d7;
+  --weekday-border: 1px solid rgb(116, 115, 115);
+  font-size: 2vb;
   border-radius: 0;
   width: 100%;
 }
 
 .custom-calendar.vc-container .vc-header {
-  background-color: #f1f5f8;
+  background-color: #10CB8A;
   padding: 10px 0;
+  height: 50px;
 }
 
 .custom-calendar.vc-container .vc-weeks {
@@ -181,10 +204,27 @@ export default {
   padding: 5px 0;
 }
 
+body .vc-header.is-lg * {
+    /* display: block!important; */
+    /* visibility: visible!important; */
+    /* opacity: 1!important; */
+    z-index: 9;
+}
+
+.vc-title {
+  font-size: 2.5vh;
+  font-weight: 600;
+  color: #fff !important;
+  background-color: #20ad7c;
+  text-align: center;
+  margin: 0;
+}
+
+
 .custom-calendar.vc-container .vc-day {
   padding: 0 5px 3px 5px;
   text-align: left;
-  height: var(--day-height);
+  height: 25vh;
   min-width: var(--day-width);
   background-color: white;
 }
@@ -217,4 +257,104 @@ export default {
   margin-bottom: 10px;
 }
 
+.modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 40%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 300px;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.activity-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.activity-form label {
+  margin-top: 10px;
+}
+
+.activity-form input,
+.activity-form textarea {
+  margin-bottom: 10px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.activity-form button {
+  padding: 10px;
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.modal-slide-enter-active, .modal-slide-leave-active {
+  transition: transform 0.6s ease-out; /* Tempo da transição */
+}
+.modal-slide-enter, .modal-slide-leave-to {
+  transform: translateY(100%); /* Posição inicial e final da transição */
+}
+
+/* Estilo do sidebar */
+.modal-content.sidebar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 0; /* Altura inicial para 0 */
+  background-color: #fff;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  overflow: hidden; /* Esconde o conteúdo que ultrapassa a altura inicial de 0 */
+}
+
+.modal-slide-enter-active {
+  height: 40%; /* Altura desejada durante a transição de entrada */
+}
+
+.close-button-sidebar {
+  position: absolute;
+  top: 10px;
+  right: 60px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.close-modal-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 20px;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  color: #000;
+}
   </style>
