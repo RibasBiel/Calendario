@@ -9,7 +9,6 @@
           <button @click="closeModal" class="close-modal-button">
             &times;
           </button>
-          <button @click="editarAtividade" class="editar-button">Editar</button>
           <div class="cadastro-atividade">
             <div class="campo-editavel">
               <label for="titulo">Título:</label>
@@ -18,9 +17,10 @@
                 id="titulo"
                 v-model="selectedActivity.customData.title"
               />
+              <br />
               <label for="descricao">Descrição:</label>
               <textarea
-                rows="10"
+                rows="15"
                 id="descricao"
                 v-model="selectedActivity.customData.description"
               ></textarea>
@@ -29,18 +29,20 @@
               <VDatePicker v-model.range="range" mode="dateTime" />
             </div>
             <div class="campo-editavel">
-              <div class="campo-titulo">Responsável</div>
+              <div class="campo-titulo">Responsável:</div>
               <select class="campo-resp campo-select">
                 <option>Carol Lopes</option>
                 <option>Tainah Minei</option>
                 <option>Thabita</option>
               </select>
-              <div class="campo-titulo">Status</div>
+              <div class="campo-titulo">Status:</div>
               <select class="campo-status campo-select">
                 <option>Aberto</option>
                 <option>Em andamento</option>
                 <option>Encerrado</option>
               </select>
+              <br />
+              <button @click="editarAtividade" class="editar-button">Editar</button>
             </div>
           </div>
         </div>
@@ -302,7 +304,7 @@ body .vc-header.is-lg * {
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 40%;
+  height: 60%;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 1000;
 }
@@ -367,7 +369,7 @@ body .vc-header.is-lg * {
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 0; /* Altura inicial para 0 */
+  height: 60%; /* Altura inicial para 0 */
   background-color: #fff;
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
   z-index: 1000;
@@ -375,7 +377,7 @@ body .vc-header.is-lg * {
 }
 
 .modal-slide-enter-active {
-  height: 40%; /* Altura desejada durante a transição de entrada */
+  height: 60%; /* Altura desejada durante a transição de entrada */
 }
 
 .close-button-sidebar {
@@ -398,7 +400,6 @@ body .vc-header.is-lg * {
 }
 
 .campo-editavel {
-  margin-bottom: 10px;
   width: 350px;
 }
 
@@ -413,24 +414,36 @@ body .vc-header.is-lg * {
   text-align: start;
   margin-bottom: 5px;
   font-size: 12px;
+  width: 100%;
+  text-align:left;
+  margin-left: 30px;
 }
 
-.campo-editavel input,
+.campo-editavel input{
+  margin-left: 30px;
+  width: 100%;
+  height: 30px;
+}
 .campo-editavel textarea {
-  padding: 10px;
+  margin-left: 30px;
   width: 100%;
 }
 
 .editar-button {
-  position: absolute;
   bottom: 50px;
   right: 50px;
+  width: 80%;
+  height: 30px;
+  border-radius: 5px;
+  border: none;
 }
 
 .cadastro-atividade {
   display: flex;
   flex-direction: row;
   width: 95%;
+  justify-content: center;
+  justify-items: center;
 }
 
 .campo-editavel {
@@ -442,7 +455,9 @@ body .vc-header.is-lg * {
 
 .campo-titulo {
   margin-bottom: 10px;
-  font-size: 14px
+  font-size: 12px;
+  width: 80%;
+  text-align: left;
 }
 
 .campo-select {
